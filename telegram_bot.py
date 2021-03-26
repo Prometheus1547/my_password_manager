@@ -30,7 +30,7 @@ def show_all_passwords(update: Update, context):
         for password in passwords:
             button = [[InlineKeyboardButton("Get pass", callback_data=password[2])]]
             reply_markup = InlineKeyboardMarkup(button)
-            update.message.reply_text(password, reply_markup=reply_markup)
+            update.message.reply_text(password[1], reply_markup=reply_markup)
     else:
         update.message.reply_text('There is no any passwords!')
 
@@ -46,9 +46,11 @@ def main():
 
     updater.dispatcher.add_handler(CommandHandler('start', start))
     updater.dispatcher.add_handler(CommandHandler('show_list', show_all_passwords))
+
     updater.dispatcher.add_handler(generate_pass_conv)
     updater.dispatcher.add_handler(save_pass_conv)
     updater.dispatcher.add_handler(find_pass_conv)
+
     updater.dispatcher.add_handler(CallbackQueryHandler(get_password_from_button))
 
     updater.start_polling()

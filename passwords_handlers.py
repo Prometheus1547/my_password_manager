@@ -2,6 +2,8 @@ import random
 import csv
 import os.path
 
+from datetime import datetime
+
 chars = '.-abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
 
 
@@ -21,7 +23,7 @@ def check_password(service_name: str, filename: str = 'passwords_book.csv'):
         with open(filename, 'w', newline='') as csv_file:
             print('Creating new password dictionary...')
             writer = csv.writer(csv_file, delimiter=',')
-            writer.writerow(['ID', 'ServiceName', 'Password'])
+            writer.writerow(['ID', 'ServiceName', 'Password', 'CreatedTime'])
     else:
         # check if there is no any passwords for services
         passwords = read_all_passwords()
@@ -43,7 +45,8 @@ def save_pass_to_csv(service_name: str, password: str, filename: str = 'password
         writer = csv.writer(csv_file, delimiter=',')
         if len(service_name) == 0:
             service_name = str(index)
-        writer.writerow([index, service_name, password])
+
+        writer.writerow([index, service_name, password, str(datetime.now().timestamp())])
 
 
 def get_passwords():

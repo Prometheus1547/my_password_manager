@@ -21,6 +21,7 @@ def generate_password_question2(update: Update, context):
         update.message.reply_text('Please give me name of service:')
         return GENERATE.SERVICE
     else:
+        ph.check_password('')
         password = ph.generate_password()
         update.message.reply_text('Your generated password is:')
         update.message.reply_text(password, reply_markup=markup)

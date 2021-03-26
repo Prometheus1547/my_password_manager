@@ -10,3 +10,6 @@ class SAVING(Enum):
     ASK_HOW = 'need name service or now'
     SERVICE = 'name of this service'
     PASSWORD = 'save the password'
+
+class FIND(Enum):
+    FIND =  'find a password'

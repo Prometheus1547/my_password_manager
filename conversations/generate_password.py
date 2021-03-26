@@ -1,9 +1,10 @@
 from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import ConversationHandler, CommandHandler, MessageHandler, Filters, CallbackContext
 
+from conversations.basic_conver import markup
 import passwords_handlers as ph
 from statements import GENERATE
-from basic_conversation import markup
+
 
 def generate_password_question(update: Update, context: CallbackContext):
     replay_keyboard = [

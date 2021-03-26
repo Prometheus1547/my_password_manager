@@ -4,8 +4,11 @@ from telegram import ReplyKeyboardMarkup, InlineKeyboardButton, InlineKeyboardMa
 from telegram import Update
 from telegram.ext import MessageHandler, CommandHandler, ConversationHandler, CallbackQueryHandler
 from telegram.ext import Updater, Filters, CallbackContext
+
+from conversations.basic_conver import markup
 from conversations.generate_password import generate_pass_conv
 from conversations.save_password import save_pass_conv
+from conversations.find_password import find_pass_conv
 
 import passwords_handlers as ph
 from statements import GENERATE, SAVING
@@ -14,12 +17,6 @@ logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 TOKEN = '1656054388:AAEfmVAqRehKc4-7hvU2yDb6w54ChS0aVEE'
-
-replay_keyboard = [
-    ['/generate', '/save'],
-    ['/find', '/show_list']
-]
-markup = ReplyKeyboardMarkup(replay_keyboard, one_time_keyboard=False)
 
 
 def start(update: Update, context: CallbackContext):
@@ -51,6 +48,7 @@ def main():
     updater.dispatcher.add_handler(CommandHandler('show_list', show_all_passwords))
     updater.dispatcher.add_handler(generate_pass_conv)
     updater.dispatcher.add_handler(save_pass_conv)
+    updater.dispatcher.add_handler(find_pass_conv)
     updater.dispatcher.add_handler(CallbackQueryHandler(get_password_from_button))
 
     updater.start_polling()

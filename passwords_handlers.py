@@ -79,12 +79,13 @@ def read_all_passwords(filename: str = 'passwords_book.csv') -> list[str, str, s
 
 
 def find_password_by_service_name(service_name: str):
+    print('Trying to find password for service ' + service_name)
     passwords = read_all_passwords()
     password = ''
     for record in passwords:
-        if service_name in record[1]:
-            password = record[0]
-
+        if service_name == record[1]:
+            password = record[2]
+    print(f'Password for service {service_name} was founded')
     return password
 
 

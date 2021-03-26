@@ -3,12 +3,7 @@ from telegram.ext import ConversationHandler, CommandHandler, MessageHandler, Fi
 
 import passwords_handlers as ph
 from statements import GENERATE
-
-replay_keyboard = [
-    ['/generate', '/save'],
-    ['/find', '/show_list']
-]
-markup = ReplyKeyboardMarkup(replay_keyboard, one_time_keyboard=False)
+from basic_conversation import markup
 
 def generate_password_question(update: Update, context: CallbackContext):
     replay_keyboard = [

@@ -1,7 +1,6 @@
 import random
 import csv
 import os.path
-from typing import List
 
 chars = '.-abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
 
@@ -30,6 +29,8 @@ def save_pass_to_csv(service_name: str, password: str, filename: str = 'password
 def get_passwords():
     passwords = read_all_passwords()
     pass_lines = []
+    if len(passwords) == 0:
+        return ''
     for row in passwords:
         password = row[1]
         service_name = ''
@@ -54,6 +55,7 @@ def read_all_passwords(filename: str = 'passwords_book.csv'):
                     pass_dictionary.append([row[0], row[1]])
                 i += 1
             return pass_dictionary
+    return []
 
 
 

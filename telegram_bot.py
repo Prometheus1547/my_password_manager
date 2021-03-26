@@ -57,8 +57,12 @@ def generate_password_answer1(update: Update, context):
 
 
 def show_all_passwords(update: Update, context):
-    update.message.reply_text('List of passwords:')
-    update.message.reply_text(ph.get_passwords())
+    passwords = ph.get_passwords()
+    if len(passwords) > 0:
+        update.message.reply_text('List of passwords:')
+        update.message.reply_text(passwords)
+    else:
+        update.message.reply_text('There is no any passwords!')
 
 def main():
     updater = Updater(token=TOKEN, use_context=True)

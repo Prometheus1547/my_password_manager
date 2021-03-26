@@ -48,9 +48,12 @@ def generate_password_question2(update: Update, context):
 
 def generate_password_answer1(update: Update, context):
     name_of_service = update.message.text
-    password = ph.generate_password(name=name_of_service)
-    update.message.reply_text('Your generated password for service ' + name_of_service + ' is:')
-    update.message.reply_text(password, reply_markup=markup)
+    if ph.check_password(name_of_service):
+        password = ph.generate_password(service_name=name_of_service)
+        update.message.reply_text('Your generated password for service ' + name_of_service + ' is:')
+        update.message.reply_text(password, reply_markup=markup)
+    else:
+        update.message.reply_text('Looks like something get wrong! Maybe password for this service already exists', reply_markup=markup)
 
     return ConversationHandler.END
 
@@ -60,7 +63,7 @@ def show_all_passwords(update: Update, context):
     if len(passwords) > 0:
         update.message.reply_text('List of passwords:')
         for password in passwords:
-            button = [[InlineKeyboardButton("Get pass", callback_data=password[1])]]
+            button = [[InlineKeyboardButton("Get pass", callback_data=password[2])]]
             reply_markup = InlineKeyboardMarkup(button)
             update.message.reply_text(password, reply_markup=reply_markup)
     else:

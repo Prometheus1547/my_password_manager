@@ -5,27 +5,43 @@ import os.path
 chars = '.-abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
 
 
-def generate_password(length: int = 12, name: str = ''):
+def generate_password(length: int = 12, service_name: str = ''):
     password = ''
     for i in range(length):
         password += random.choice(chars)
     print('Generated password: ' + password)
-    if name:
-        print('For service: ' + name)
-    save_pass_to_csv(name, password)
+    if service_name:
+        print('For service: ' + service_name)
+    save_pass_to_csv(service_name, password)
     return password
 
 
-def save_pass_to_csv(service_name: str, password: str, filename: str = 'passwords_book.csv'):
+def check_password(service_name: str,filename: str = 'passwords_book.csv'):
     if not os.path.exists(filename):
         with open(filename, 'w', newline='') as csv_file:
             print('Creating new password dictionary...')
             writer = csv.writer(csv_file, delimiter=',')
-            writer.writerow(['ServiceName', 'Password'])
+            writer.writerow(['ID', 'ServiceName', 'Password'])
+    else:
+        # check if there is no any passwords for services
+        passwords = read_all_passwords()
+
+        if service_name in [item[1] for item in passwords]:
+            print("Error! Password for this service already exists")
+            return False
+
+    return True
+
+
+def save_pass_to_csv(service_name: str, password: str, filename: str = 'passwords_book.csv'):
+    passwords = read_all_passwords()
+    index = 0
+    if len(passwords) > 0:
+        index = int(passwords[-1][0]) + 1
     with open(filename, 'a', newline='') as csv_file:
         print(f'Appending password "{password}" to dictionary...')
         writer = csv.writer(csv_file, delimiter=',')
-        writer.writerow([service_name, password])
+        writer.writerow([index, service_name, password])
 
 
 def get_passwords():
@@ -34,27 +50,27 @@ def get_passwords():
     if len(passwords) == 0:
         return ''
     for row in passwords:
-        password = row[1]
+        password = row[2]
         service_name = ''
-        if len(row[0]) == 0:
+        if len(row[1]) == 0:
             service_name = 'blank'
         else:
-            service_name = row[0]
+            service_name = row[1]
         pass_lines.append(service_name + ':' + password)
 
     print(pass_lines)
     return pass_lines
 
 
-def read_all_passwords(filename: str = 'passwords_book.csv'):
+def read_all_passwords(filename: str = 'passwords_book.csv') -> list[str, str]:
     if os.path.exists(filename):
         with open(filename, 'r') as csv_file:
-            pass_dictionary = []
+            pass_dictionary = list[str, str]()
             reader = csv.reader(csv_file)
             i = 0
             for row in reader:
                 if i > 0:
-                    pass_dictionary.append([row[0], row[1]])
+                    pass_dictionary.append([row[0], row[1], row[2]])
                 i += 1
             return pass_dictionary
     return []

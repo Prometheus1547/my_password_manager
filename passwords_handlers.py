@@ -19,9 +19,11 @@ def generate_password(length: int = 12, name: str = ''):
 def save_pass_to_csv(service_name: str, password: str, filename: str = 'passwords_book.csv'):
     if not os.path.exists(filename):
         with open(filename, 'w', newline='') as csv_file:
+            print('Creating new password dictionary...')
             writer = csv.writer(csv_file, delimiter=',')
             writer.writerow(['ServiceName', 'Password'])
     with open(filename, 'a', newline='') as csv_file:
+        print(f'Appending password "{password}" to dictionary...')
         writer = csv.writer(csv_file, delimiter=',')
         writer.writerow([service_name, password])
 

@@ -1,18 +1,17 @@
 import logging
 
-from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
+from telegram import ReplyKeyboardMarkup
 from telegram import Update
 from telegram.ext import MessageHandler, CommandHandler, ConversationHandler
 from telegram.ext import Updater, Filters, CallbackContext
 
 import passwords_handlers as ph
+from statements import GENERATE, SAVING
 
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 TOKEN = '1656054388:AAEfmVAqRehKc4-7hvU2yDb6w54ChS0aVEE'
-
-ASK_HOW, SERVICE, BASIC = range(3)
 
 replay_keyboard = [
     ['/generate', '/save'],
@@ -31,14 +30,14 @@ def generate_password_question(update: Update, context: CallbackContext):
     ]
     markup = ReplyKeyboardMarkup(replay_keyboard, one_time_keyboard=True)
     update.message.reply_text('You want your password for some service or no?', reply_markup=markup)
-    return ASK_HOW
+    return GENERATE.ASK_HOW
 
 
 def generate_password_question2(update: Update, context):
     answer = update.message.text
     if answer.lower() == 'yes':
         update.message.reply_text('Please give me name of service:')
-        return SERVICE
+        return GENERATE.SERVICE
     else:
         password = ph.generate_password()
         update.message.reply_text('Your generated password is:')
@@ -64,27 +63,82 @@ def show_all_passwords(update: Update, context):
     else:
         update.message.reply_text('There is no any passwords!')
 
+
+def save_password_question_1(update: Update, context):
+    replay_keyboard = [
+        ['YES', 'NO']
+    ]
+    markup = ReplyKeyboardMarkup(replay_keyboard, one_time_keyboard=True)
+    update.message.reply_text('You want your password for some service or no?', reply_markup=markup)
+    return SAVING.ASK_HOW
+
+
+def save_password_question_2(update: Update, context):
+    answer = update.message.text
+    if answer.lower() == 'yes':
+        update.message.reply_text('Please give me name of service:')
+        return SAVING.SERVICE
+    else:
+        update.message.reply_text('Please insert password:')
+        return SAVING.PASSWORD
+
+
+name_of_service = ''
+
+
+def save_password_question_3(update: Update, context):
+    global name_of_service
+    name_of_service = update.message.text
+    update.message.reply_text('Please insert password:')
+
+    return SAVING.PASSWORD
+
+
+def save_password_answer(update: Update, context):
+    global name_of_service
+    password = update.message.text
+    ph.save_pass_to_csv(name_of_service, password)
+    update.message.reply_text(f'Added password "{password}" with success', reply_markup=markup)
+    name_of_service = ''
+    return ConversationHandler.END
+
+
 def main():
     updater = Updater(token=TOKEN, use_context=True)
+
     generate_pass_conv = ConversationHandler(
         entry_points=[CommandHandler('generate', generate_password_question)],
         states={
-            ASK_HOW: [
+            GENERATE.ASK_HOW: [
                 MessageHandler(Filters.regex('^(YES|NO)$'), generate_password_question2)
             ],
-            SERVICE: [
+            GENERATE.SERVICE: [
                 MessageHandler(Filters.text, generate_password_answer1)
-            ],
-            BASIC: [
-                CommandHandler('start', start)
             ]
         },
         fallbacks=[CommandHandler('generate', generate_password_question)]
     )
 
+    save_pass_conv = ConversationHandler(
+        entry_points=[CommandHandler('save', save_password_question_1)],
+        states={
+            SAVING.ASK_HOW: [
+                MessageHandler(Filters.regex('^(YES|NO)$'), save_password_question_2)
+            ],
+            SAVING.SERVICE: [
+                MessageHandler(Filters.text, save_password_question_3)
+            ],
+            SAVING.PASSWORD: [
+                MessageHandler(Filters.text, save_password_answer)
+            ]
+        },
+        fallbacks=[CommandHandler('save', save_password_question_1)]
+    )
+
     updater.dispatcher.add_handler(CommandHandler('start', start))
     updater.dispatcher.add_handler(CommandHandler('show_list', show_all_passwords))
     updater.dispatcher.add_handler(generate_pass_conv)
+    updater.dispatcher.add_handler(save_pass_conv)
 
     updater.start_polling()
     updater.idle()

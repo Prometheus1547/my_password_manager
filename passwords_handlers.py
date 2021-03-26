@@ -43,7 +43,7 @@ def get_passwords():
         pass_lines.append(service_name + ':' + password)
 
     print(pass_lines)
-    return '\n'.join(pass_lines, )
+    return pass_lines
 
 
 def read_all_passwords(filename: str = 'passwords_book.csv'):

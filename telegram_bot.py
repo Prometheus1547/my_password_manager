@@ -1,8 +1,8 @@
 import logging
 
-from telegram import ReplyKeyboardMarkup
+from telegram import ReplyKeyboardMarkup, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram import Update
-from telegram.ext import MessageHandler, CommandHandler, ConversationHandler
+from telegram.ext import MessageHandler, CommandHandler, ConversationHandler, CallbackQueryHandler
 from telegram.ext import Updater, Filters, CallbackContext
 
 import passwords_handlers as ph
@@ -56,13 +56,21 @@ def generate_password_answer1(update: Update, context):
 
 
 def show_all_passwords(update: Update, context):
-    passwords = ph.get_passwords()
+    passwords = ph.read_all_passwords()
     if len(passwords) > 0:
         update.message.reply_text('List of passwords:')
-        update.message.reply_text(passwords)
+        for password in passwords:
+            button = [[InlineKeyboardButton("Get pass", callback_data=password[1])]]
+            reply_markup = InlineKeyboardMarkup(button)
+            update.message.reply_text(password, reply_markup=reply_markup)
     else:
         update.message.reply_text('There is no any passwords!')
 
+
+def get_password_from_button(update: Update, context):
+    query = update.callback_query
+    query.answer()
+    query.message.reply_text(query.data)
 
 def save_password_question_1(update: Update, context):
     replay_keyboard = [
@@ -139,6 +147,7 @@ def main():
     updater.dispatcher.add_handler(CommandHandler('show_list', show_all_passwords))
     updater.dispatcher.add_handler(generate_pass_conv)
     updater.dispatcher.add_handler(save_pass_conv)
+    updater.dispatcher.add_handler(CallbackQueryHandler(get_password_from_button))
 
     updater.start_polling()
     updater.idle()

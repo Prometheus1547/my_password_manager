@@ -16,7 +16,7 @@ def generate_password(length: int = 12, service_name: str = ''):
     return password
 
 
-def check_password(service_name: str,filename: str = 'passwords_book.csv'):
+def check_password(service_name: str, filename: str = 'passwords_book.csv'):
     if not os.path.exists(filename):
         with open(filename, 'w', newline='') as csv_file:
             print('Creating new password dictionary...')
@@ -41,6 +41,8 @@ def save_pass_to_csv(service_name: str, password: str, filename: str = 'password
     with open(filename, 'a', newline='') as csv_file:
         print(f'Appending password "{password}" to dictionary...')
         writer = csv.writer(csv_file, delimiter=',')
+        if len(service_name) == 0:
+            service_name = str(index)
         writer.writerow([index, service_name, password])
 
 
@@ -62,7 +64,7 @@ def get_passwords():
     return pass_lines
 
 
-def read_all_passwords(filename: str = 'passwords_book.csv') -> list[str, str]:
+def read_all_passwords(filename: str = 'passwords_book.csv') -> list[str, str, str]:
     if os.path.exists(filename):
         with open(filename, 'r') as csv_file:
             pass_dictionary = list[str, str]()
@@ -74,6 +76,18 @@ def read_all_passwords(filename: str = 'passwords_book.csv') -> list[str, str]:
                 i += 1
             return pass_dictionary
     return []
+
+
+def find_password_by_service_name(service_name: str):
+    passwords = read_all_passwords()
+    password = ''
+    for record in passwords:
+        if service_name in record[1]:
+            password = record[0]
+
+    return password
+
+
 
 
 

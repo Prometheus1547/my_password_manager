@@ -31,7 +31,7 @@ name_of_service = ''
 def save_password_question_3(update: Update, context):
     global name_of_service
     name_of_service = update.message.text
-    if ph.check_password(service_name=name_of_service):
+    if ph.check_password(service_name=name_of_service, id_user=update.message.from_user.id):
         update.message.reply_text('Please insert password:')
         return SAVING.PASSWORD
     else:
@@ -42,7 +42,7 @@ def save_password_question_3(update: Update, context):
 def save_password_answer(update: Update, context):
     global name_of_service
     password = update.message.text
-    ph.save_pass_to_csv(name_of_service, password)
+    ph.save_pass_to_csv(name_of_service, password, id_user=update.message.from_user.id)
     update.message.reply_text(f'Added password "{password}" with success', reply_markup=basic_markup)
     name_of_service = ''
     return ConversationHandler.END

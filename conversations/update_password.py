@@ -36,7 +36,7 @@ def update_password_question_3(update: Update, context):
 def update_password_answer(update: Update, context):
     global name_of_service
     password = update.message.text
-    ph.update_password_by_service(name_of_service, password)
+    ph.update_password_by_service(name_of_service, password, id_user=update.message.from_user.id)
     update.message.reply_text(f'Updated password "{password}" for service "{name_of_service} "with success',
                               reply_markup=basic_markup)
     name_of_service = ''

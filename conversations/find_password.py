@@ -13,7 +13,7 @@ def find_password_question1(update: Update, context):
 
 def find_password_answer(update: Update, context):
     answer = update.message.text
-    record = ph.find_password_by_service_name(answer)
+    record = ph.find_password_by_service_name(answer, id_user=update.message.from_user.id)
     password = []
     if record:
         password = record[2]

@@ -5,6 +5,7 @@ from telegram import Update
 from telegram.ext import MessageHandler, CommandHandler, ConversationHandler, CallbackQueryHandler
 from telegram.ext import Updater, Filters, CallbackContext
 
+from configs import API_TOKEN
 from conversations.basic_conver import basic_markup
 from conversations.delete_password import delete_pass_conv
 from conversations.generate_password import generate_pass_conv
@@ -19,17 +20,13 @@ from statements import GENERATE, SAVING, SHOW_ALL
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-TOKEN = '1656054388:AAEfmVAqRehKc4-7hvU2yDb6w54ChS0aVEE'
-
 
 def start(update: Update, context: CallbackContext):
     update.message.reply_text('Welcome!', reply_markup=basic_markup)
 
 
-
-
 def main():
-    updater = Updater(token=TOKEN, use_context=True)
+    updater = Updater(token=API_TOKEN, use_context=True)
 
     updater.dispatcher.add_handler(CommandHandler('start', start))
 

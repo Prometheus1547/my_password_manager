@@ -28,7 +28,7 @@ def delete_password_answer(update: Update, context):
     global name_of_service
     answer = update.message.text
     if answer.lower() == 'yes':
-        ph.delete_password_by_service(name_of_service)
+        ph.delete_password_by_service(name_of_service, id_user=update.message.from_user.id)
         update.message.reply_text(f'Deleted password for "{name_of_service}" with success', reply_markup=basic_markup)
         name_of_service = ''
         return ConversationHandler.END

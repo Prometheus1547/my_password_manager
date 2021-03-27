@@ -21,8 +21,8 @@ def generate_password_question2(update: Update, context):
         update.message.reply_text('Please give me name of service:')
         return GENERATE.SERVICE
     else:
-        ph.check_password('')
-        password = ph.generate_password()
+        ph.check_password('', id_user=update.message.from_user.id)
+        password = ph.generate_password(id_user=update.message.from_user.id)
         update.message.reply_text('Your generated password is:')
         update.message.reply_text(password, reply_markup=basic_markup)
 
@@ -31,8 +31,8 @@ def generate_password_question2(update: Update, context):
 
 def generate_password_answer1(update: Update, context):
     name_of_service = update.message.text
-    if ph.check_password(name_of_service):
-        password = ph.generate_password(service_name=name_of_service)
+    if ph.check_password(name_of_service, id_user=update.message.from_user.id):
+        password = ph.generate_password(service_name=name_of_service, id_user=update.message.from_user.id)
         update.message.reply_text('Your generated password for service ' + name_of_service + ' is:')
         update.message.reply_text(password, reply_markup=basic_markup)
     else:

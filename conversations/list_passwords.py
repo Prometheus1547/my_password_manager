@@ -7,7 +7,7 @@ from statements import SHOW_ALL
 
 
 def show_all_passwords(update: Update, context):
-    passwords = ph.read_all_passwords()
+    passwords = ph.read_all_passwords(id_user=update.message.from_user.id)
     if len(passwords) > 0:
         update.message.reply_text('List of passwords:')
         for password in passwords:

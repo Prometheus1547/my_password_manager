@@ -2,23 +2,29 @@ import random
 import csv
 import os.path
 
+from configs import path_to_passwords
 from datetime import datetime
 
 chars = '.-abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
 
 
-def generate_password(length: int = 12, service_name: str = ''):
+def get_file_name(id_user: str):
+    return path_to_passwords + str(id_user) + '.csv'
+
+
+def generate_password(id_user:str, length: int = 12, service_name: str = ''):
     password = ''
     for i in range(length):
         password += random.choice(chars)
     print('Generated password: ' + password)
     if service_name:
         print('For service: ' + service_name)
-    save_pass_to_csv(service_name, password)
+    save_pass_to_csv(service_name, password, id_user=id_user)
     return password
 
 
-def check_password(service_name: str, filename: str = 'passwords_book.csv'):
+def check_password(service_name: str, id_user: str):
+    filename = get_file_name(id_user)
     if not os.path.exists(filename):
         with open(filename, 'w', newline='') as csv_file:
             print('Creating new password dictionary...')
@@ -26,7 +32,7 @@ def check_password(service_name: str, filename: str = 'passwords_book.csv'):
             writer.writerow(['ID', 'ServiceName', 'Password', 'CreatedTime'])
     else:
         # check if there is no any passwords for services
-        passwords = read_all_passwords()
+        passwords = read_all_passwords(id_user)
 
         if service_name in [item[1] for item in passwords]:
             print("Error! Password for this service already exists")
@@ -35,8 +41,9 @@ def check_password(service_name: str, filename: str = 'passwords_book.csv'):
     return True
 
 
-def save_pass_to_csv(service_name: str, password: str, filename: str = 'passwords_book.csv'):
-    passwords = read_all_passwords()
+def save_pass_to_csv(service_name: str, password: str, id_user: str):
+    filename = get_file_name(id_user)
+    passwords = read_all_passwords(id_user)
     index = 0
     if len(passwords) > 0:
         index = int(passwords[-1][0]) + 1
@@ -49,8 +56,8 @@ def save_pass_to_csv(service_name: str, password: str, filename: str = 'password
         writer.writerow([index, service_name, password, str(datetime.now().timestamp())])
 
 
-def get_passwords():
-    passwords = read_all_passwords()
+def get_passwords(id_user: str):
+    passwords = read_all_passwords(id_user)
     pass_lines = []
     if len(passwords) == 0:
         return ''
@@ -67,7 +74,8 @@ def get_passwords():
     return pass_lines
 
 
-def read_all_passwords(filename: str = 'passwords_book.csv', take_titles: bool = False) -> list[str, str, str, str]:
+def read_all_passwords(id_user: str, take_titles: bool = False) -> list[str, str, str, str]:
+    filename = get_file_name(id_user)
     if os.path.exists(filename):
         with open(filename, 'r') as csv_file:
             pass_dictionary = list[str, str, str, str]()
@@ -83,9 +91,9 @@ def read_all_passwords(filename: str = 'passwords_book.csv', take_titles: bool =
     return []
 
 
-def find_password_by_service_name(service_name: str):
+def find_password_by_service_name(service_name: str, id_user: str):
     print('Trying to find password for service ' + service_name)
-    passwords = read_all_passwords()
+    passwords = read_all_passwords(id_user)
     rec = list[str, str, str, str]()
     for record in passwords:
         if service_name == record[1]:
@@ -95,17 +103,18 @@ def find_password_by_service_name(service_name: str):
     return rec
 
 
-def rewrite_passwords_dictionary(passwords, filename: str = 'passwords_book.csv' ):
+def rewrite_passwords_dictionary(passwords, id_user: str):
+    filename = get_file_name(id_user)
     with open (filename, 'w', newline='') as csv_file:
         writer = csv.writer(csv_file, delimiter=',')
         writer.writerows(passwords)
 
 
-def update_password_by_service(service_name: str, new_password: str):
+def update_password_by_service(service_name: str, new_password: str, id_user: str):
     # todo: refactor this shitty part
-    passwords = read_all_passwords(take_titles=True)
+    passwords = read_all_passwords(take_titles=True, id_user=id_user)
 
-    password = find_password_by_service_name(service_name)
+    password = find_password_by_service_name(service_name, id_user=id_user)
     password[2] = new_password
 
     i = 0
@@ -115,18 +124,21 @@ def update_password_by_service(service_name: str, new_password: str):
             break
         i += 1
 
-    rewrite_passwords_dictionary(passwords)
+    rewrite_passwords_dictionary(passwords, id_user=id_user)
     print('Updated password')
 
 
-def delete_password_by_service(service_name: str):
-    passwords = read_all_passwords(take_titles=True)
+def delete_password_by_service(service_name: str, id_user: str):
+    passwords = read_all_passwords(take_titles=True, id_user=id_user)
 
-    passwords.remove(find_password_by_service_name(service_name))
+    passwords.remove(find_password_by_service_name(service_name, id_user=id_user))
 
-    rewrite_passwords_dictionary(passwords)
+    rewrite_passwords_dictionary(passwords, id_user=id_user)
 
     print('Deleted with success')
+
+
+
 
 
 

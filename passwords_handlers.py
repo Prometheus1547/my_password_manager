@@ -108,6 +108,14 @@ def find_password_by_service_name(service_name: str, id_user: str):
     return rec
 
 
+def find_service_by_id(password_id: str, id_user: str):
+    print('Trying to find password for id ' + password_id)
+    passwords = read_all_passwords(id_user)
+    for record in passwords:
+        if record[0] == password_id:
+            return record
+
+
 def rewrite_passwords_dictionary(passwords, id_user: str):
     filename = get_file_name(id_user)
     with open (filename, 'w', newline='') as csv_file:
@@ -115,17 +123,17 @@ def rewrite_passwords_dictionary(passwords, id_user: str):
         writer.writerows(passwords)
 
 
-def update_password_by_service(service_name: str, new_password: str, id_user: str):
+def update_password_by_id(pass_id: str, new_password: str, id_user: str):
     # todo: refactor this shitty part
     passwords = read_all_passwords(take_titles=True, id_user=id_user)
 
-    password = find_password_by_service_name(service_name, id_user=id_user)
-    password[0][2] = new_password
+    password = find_service_by_id(pass_id, id_user=id_user)
+    password[2] = new_password
 
     i = 0
     for recs in passwords:
         if recs[0] == password[0]:
-            passwords[i] = password[0]
+            passwords[i] = password
             break
         i += 1
 

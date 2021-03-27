@@ -70,7 +70,7 @@ def get_passwords():
 def read_all_passwords(filename: str = 'passwords_book.csv', take_titles: bool = False) -> list[str, str, str, str]:
     if os.path.exists(filename):
         with open(filename, 'r') as csv_file:
-            pass_dictionary = list[str, str, str]()
+            pass_dictionary = list[str, str, str, str]()
             reader = csv.reader(csv_file)
             i = 0
             for row in reader:

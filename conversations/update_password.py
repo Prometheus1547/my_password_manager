@@ -19,8 +19,8 @@ def update_password_from_inline_button(update: Update, context: CallbackContext)
     query.answer()
     global name_of_service
     name_of_service = get_value(query.data)
-
-    return UPDATE.SERVICE
+    query.message.reply_text('Please insert new password:')
+    return UPDATE.UPDATE
 
 
 def update_password_question_3(update: Update, context):

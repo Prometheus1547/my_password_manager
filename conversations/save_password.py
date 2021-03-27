@@ -6,23 +6,9 @@ from conversations.basic_conver import basic_markup
 from statements import SAVING
 
 
-def save_password_question_1(update: Update, context):
-    replay_keyboard = [
-        ['YES', 'NO']
-    ]
-    markup = ReplyKeyboardMarkup(replay_keyboard, one_time_keyboard=True)
-    update.message.reply_text('You want your password for some service or no?', reply_markup=markup)
-    return SAVING.ASK_HOW
-
-
 def save_password_question_2(update: Update, context):
-    answer = update.message.text
-    if answer.lower() == 'yes':
-        update.message.reply_text('Please give me name of service:')
-        return SAVING.SERVICE
-    else:
-        update.message.reply_text('Please insert password:')
-        return SAVING.PASSWORD
+    update.message.reply_text('Please give me name of service:')
+    return SAVING.SERVICE
 
 
 name_of_service = ''
@@ -49,11 +35,8 @@ def save_password_answer(update: Update, context):
 
 
 save_pass_conv = ConversationHandler(
-    entry_points=[CommandHandler('save', save_password_question_1)],
+    entry_points=[CommandHandler('save', save_password_question_2)],
     states={
-        SAVING.ASK_HOW: [
-            MessageHandler(Filters.regex('^(YES|NO)$'), save_password_question_2)
-        ],
         SAVING.SERVICE: [
             MessageHandler(Filters.text, save_password_question_3)
         ],
@@ -61,5 +44,5 @@ save_pass_conv = ConversationHandler(
             MessageHandler(Filters.text, save_password_answer)
         ]
     },
-    fallbacks=[CommandHandler('save', save_password_question_1)]
+    fallbacks=[CommandHandler('save', save_password_question_2)]
 )

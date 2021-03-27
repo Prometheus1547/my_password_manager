@@ -17,6 +17,7 @@ def generate_password_question(update: Update, context: CallbackContext):
 
 symbols = ''
 length = 12
+name_of_service = ''
 
 
 def generate_password_question2(update: Update, context):
@@ -41,17 +42,40 @@ def generate_password_question_2_1(update: Update, context):
 
 
 def generate_password_answer1(update: Update, context):
+    global name_of_service
     name_of_service = update.message.text
     global length
     if ph.check_password(name_of_service, id_user=update.message.from_user.id):
         password = ph.generate_password(service_name=name_of_service, id_user=update.message.from_user.id, symbols=symbols, length=length)
         update.message.reply_text('Your generated password for service ' + name_of_service + ' is:')
         update.message.reply_text(password, reply_markup=basic_markup)
+        length = 12
+        name_of_service = ''
+        return ConversationHandler.END
     else:
-        update.message.reply_text('Looks like something get wrong! Maybe password for this service already exists',
-                                  reply_markup=basic_markup)
-    length = 12
-    return ConversationHandler.END
+        replay_keyboard = [
+            ['YES✅', 'NO❌']
+        ]
+        markup_generate = ReplyKeyboardMarkup(replay_keyboard, one_time_keyboard=True)
+        update.message.reply_text('Looks like  password for this service already exists! Create it anyway?',
+                                  reply_markup=markup_generate)
+        return GENERATE.CREATE_ANYWAY
+
+
+def generate_password_answer2(update: Update, context):
+    global name_of_service, length
+    answer = update.message.text
+    if answer.lower() == 'yes' or answer == 'YES✅':
+        password = ph.generate_password(service_name=name_of_service, id_user=update.message.from_user.id,
+                                        symbols=symbols, length=length)
+        update.message.reply_text('Your generated password for service ' + name_of_service + ' is:')
+        update.message.reply_text(password, reply_markup=basic_markup)
+        name_of_service = ''
+        length = 12
+        return ConversationHandler.END
+    else:
+        update.message.reply_text('Got it.', reply_markup=basic_markup)
+        return ConversationHandler.END
 
 
 generate_pass_conv = ConversationHandler(
@@ -65,6 +89,9 @@ generate_pass_conv = ConversationHandler(
         ],
         GENERATE.SERVICE: [
             MessageHandler(Filters.text, generate_password_answer1)
+        ],
+        GENERATE.CREATE_ANYWAY: [
+            MessageHandler(Filters.text, generate_password_answer2)
         ]
     },
     fallbacks=[CommandHandler('generate', generate_password_question)]

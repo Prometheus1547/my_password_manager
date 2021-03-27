@@ -8,11 +8,13 @@ DELIMITER = '#####'
 class GENERATE(Enum):
     ASK_HOW = 'need name service or now'
     ASK_HOW_LONG = 'how many symbols password should have'
+    CREATE_ANYWAY = 'create even if there is simmilar service' + DELIMITER
     SERVICE = 'name of this service'
 
 
 class SAVING(Enum):
     ASK_HOW = 'need name service or now'
+    CREATE_ANYWAY = 'create even if there is simmilar service' + DELIMITER
     SERVICE = 'name of this service'
     PASSWORD = 'save the password'
 

@@ -1,5 +1,8 @@
 from enum import Enum
 
+# because the api for this bot is too shitty and I have
+# to divide string to get value
+DELIMITER = '#####'
 
 class GENERATE(Enum):
     ASK_HOW = 'need name service or now'
@@ -12,4 +15,15 @@ class SAVING(Enum):
     PASSWORD = 'save the password'
 
 class FIND(Enum):
-    FIND =  'find a password'
+    FIND = 'find a password'
+
+class UPDATE(Enum):
+    SERVICE = 'enter service name'
+    UPDATE = 'update password'
+
+
+class SHOW_ALL(Enum):
+    INIT = 'init working with list'
+    GET = 'get a password' + DELIMITER
+    UPDATE = 'update a password' + DELIMITER
+    DELETE = 'delete a password' + DELIMITER

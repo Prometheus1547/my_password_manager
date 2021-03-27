@@ -67,15 +67,17 @@ def get_passwords():
     return pass_lines
 
 
-def read_all_passwords(filename: str = 'passwords_book.csv') -> list[str, str, str]:
+def read_all_passwords(filename: str = 'passwords_book.csv', take_titles: bool = False) -> list[str, str, str, str]:
     if os.path.exists(filename):
         with open(filename, 'r') as csv_file:
-            pass_dictionary = list[str, str]()
+            pass_dictionary = list[str, str, str]()
             reader = csv.reader(csv_file)
             i = 0
             for row in reader:
-                if i > 0:
-                    pass_dictionary.append([row[0], row[1], row[2]])
+                if take_titles:
+                    pass_dictionary.append([row[0], row[1], row[2], row[3]])
+                elif i > 0:
+                    pass_dictionary.append([row[0], row[1], row[2], row[3]])
                 i += 1
             return pass_dictionary
     return []
@@ -84,12 +86,40 @@ def read_all_passwords(filename: str = 'passwords_book.csv') -> list[str, str, s
 def find_password_by_service_name(service_name: str):
     print('Trying to find password for service ' + service_name)
     passwords = read_all_passwords()
-    password = ''
+    rec = list[str, str, str, str]()
     for record in passwords:
         if service_name == record[1]:
-            password = record[2]
+            rec = record
+            break
     print(f'Password for service {service_name} was founded')
-    return password
+    return rec
+
+
+def rewrite_passwords_dictionary(passwords, filename: str = 'passwords_book.csv' ):
+    with open (filename, 'w', newline='') as csv_file:
+        writer = csv.writer(csv_file, delimiter=',')
+        writer.writerows(passwords)
+
+
+def update_password_by_service(service_name: str, new_password: str):
+    # todo: refactor this shitty part
+    passwords = read_all_passwords(take_titles=True)
+
+    password = find_password_by_service_name(service_name)
+    password[2] = new_password
+
+    i = 0
+    for recs in passwords:
+        if recs[0] == password[0]:
+            passwords[i] = password
+            break
+        i += 1
+
+    rewrite_passwords_dictionary(passwords)
+    print('Updated password')
+
+
+
 
 
 

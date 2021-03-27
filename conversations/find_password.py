@@ -13,7 +13,7 @@ def find_password_question1(update: Update, context):
 
 def find_password_answer(update: Update, context):
     answer = update.message.text
-    password = ph.find_password_by_service_name(answer)
+    password = ph.find_password_by_service_name(answer)[2]
     if len(password) > 0:
         update.message.reply_text('Here is your password:', reply_markup=markup)
         update.message.reply_text(password)

@@ -40,8 +40,6 @@ def generate_password_question_2_1(update: Update, context):
     return GENERATE.SERVICE
 
 
-
-
 def generate_password_answer1(update: Update, context):
     name_of_service = update.message.text
     global length

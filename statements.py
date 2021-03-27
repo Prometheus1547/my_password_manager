@@ -21,6 +21,7 @@ class FIND(Enum):
     FIND = 'find a password'
     UPDATE = 'FINDupdate password'+DELIMITER
     DELETE = 'FINDdelete password'+DELIMITER
+    GET = 'FINDget password if there are several'+DELIMITER
 
 
 class UPDATE(Enum):

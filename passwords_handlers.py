@@ -4,6 +4,7 @@ import os.path
 
 from configs import path_to_passwords
 from datetime import datetime
+from fuzzywuzzy import fuzz
 
 chars = '.-abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
 digits = '1234567890'
@@ -34,10 +35,11 @@ def check_password(service_name: str, id_user: str):
     else:
         # check if there is no any passwords for services
         passwords = read_all_passwords(id_user)
-
-        if service_name in [item[1] for item in passwords]:
-            print("Error! Password for this service already exists")
-            return False
+        for record in passwords:
+            serching_ratio = fuzz.WRatio(record[1], service_name)
+            if serching_ratio > 65:
+                print("Error! Password for this service already exists")
+                return False
 
     return True
 
@@ -97,10 +99,12 @@ def find_password_by_service_name(service_name: str, id_user: str):
     passwords = read_all_passwords(id_user)
     rec = list()
     for record in passwords:
-        if service_name == record[1]:
-            rec = record
-            break
-    print(f'Password for service {service_name} was founded')
+        searching_ratio = fuzz.WRatio(record[1], service_name)
+        if searching_ratio > 65:
+            rec.append(record)
+
+    if len(rec) == 1:
+        print(f'Password for service {service_name} was founded')
     return rec
 
 

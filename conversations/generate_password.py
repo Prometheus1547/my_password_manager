@@ -44,6 +44,7 @@ def generate_password_question_2_1(update: Update, context):
 
 def generate_password_answer1(update: Update, context):
     name_of_service = update.message.text
+    global length
     if ph.check_password(name_of_service, id_user=update.message.from_user.id):
         password = ph.generate_password(service_name=name_of_service, id_user=update.message.from_user.id, symbols=symbols, length=length)
         update.message.reply_text('Your generated password for service ' + name_of_service + ' is:')
@@ -51,7 +52,7 @@ def generate_password_answer1(update: Update, context):
     else:
         update.message.reply_text('Looks like something get wrong! Maybe password for this service already exists',
                                   reply_markup=basic_markup)
-
+    length = 12
     return ConversationHandler.END
 
 

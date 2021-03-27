@@ -6,6 +6,7 @@ from telegram.ext import MessageHandler, CommandHandler, ConversationHandler, Ca
 from telegram.ext import Updater, Filters, CallbackContext
 
 from conversations.basic_conver import markup
+from conversations.delete_password import delete_pass_conv
 from conversations.generate_password import generate_pass_conv
 from conversations.save_password import save_pass_conv
 from conversations.find_password import find_pass_conv
@@ -13,7 +14,7 @@ from conversations.list_passwords import list_passwords_conv
 from conversations.update_password import update_pass_conv, update_password_from_inline_button
 
 import passwords_handlers as ph
-from statements import GENERATE, SAVING
+from statements import GENERATE, SAVING, SHOW_ALL
 
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -37,6 +38,7 @@ def main():
     updater.dispatcher.add_handler(find_pass_conv)
     updater.dispatcher.add_handler(list_passwords_conv)
     updater.dispatcher.add_handler(update_pass_conv)
+    updater.dispatcher.add_handler(delete_pass_conv)
 
     updater.start_polling()
     updater.idle()

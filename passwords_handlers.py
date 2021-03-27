@@ -119,6 +119,14 @@ def update_password_by_service(service_name: str, new_password: str):
     print('Updated password')
 
 
+def delete_password_by_service(service_name: str):
+    passwords = read_all_passwords(take_titles=True)
+
+    passwords.remove(find_password_by_service_name(service_name))
+
+    rewrite_passwords_dictionary(passwords)
+
+    print('Deleted with success')
 
 
 

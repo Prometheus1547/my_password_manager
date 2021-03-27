@@ -21,6 +21,9 @@ class UPDATE(Enum):
     SERVICE = 'enter service name'
     UPDATE = 'update password'
 
+class DELETE(Enum):
+    DELETE = 'delete password'
+
 
 class SHOW_ALL(Enum):
     INIT = 'init working with list'

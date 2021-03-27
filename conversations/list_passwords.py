@@ -2,7 +2,7 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ConversationHandler, CommandHandler, MessageHandler, CallbackQueryHandler, CallbackContext, \
     Filters
 
-from conversations.update_password import update_pass_conv
+from conversations.update_password import update_pass_conv, update_password_from_inline_button
 from statements import SHOW_ALL, UPDATE
 
 import passwords_handlers as ph
@@ -20,7 +20,7 @@ def show_all_passwords(update: Update, context):
                 ],
                 [
                     InlineKeyboardButton("Update", callback_data=SHOW_ALL.UPDATE.value + password[1]),
-                    InlineKeyboardButton("Delete", callback_data=password[1])
+                    InlineKeyboardButton("Delete", callback_data=SHOW_ALL.DELETE.value + password[1])
                 ]
             ]
             reply_markup = InlineKeyboardMarkup(button)
@@ -39,8 +39,10 @@ def get_password_from_button(update: Update, context: CallbackContext):
     return SHOW_ALL.INIT
 
 
-def update_password_from_button(update: Update, context):
+def update_password_from_button(update: Update, context: CallbackContext):
+    return update.callback_query.data
 
+def delete_password_from_button(update: Update, context: CallbackContext):
     return update.callback_query.data
 
 
@@ -49,7 +51,8 @@ list_passwords_conv = ConversationHandler(
     states={
         SHOW_ALL.INIT: [
             CallbackQueryHandler(get_password_from_button, pattern='^' + SHOW_ALL.GET.value),
-            CallbackQueryHandler(update_password_from_button, pattern='^' + SHOW_ALL.UPDATE.value)
+            CallbackQueryHandler(update_password_from_button, pattern='^' + SHOW_ALL.UPDATE.value),
+            CallbackQueryHandler(update_password_from_button, pattern='^' + SHOW_ALL.DELETE.value),
         ]
     },
     fallbacks=[CommandHandler('show_list', show_all_passwords)]

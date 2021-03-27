@@ -43,6 +43,7 @@ def update_password_from_button(update: Update, context: CallbackContext):
     return update.callback_query.data
 
 def delete_password_from_button(update: Update, context: CallbackContext):
+
     return update.callback_query.data
 
 
@@ -52,7 +53,7 @@ list_passwords_conv = ConversationHandler(
         SHOW_ALL.INIT: [
             CallbackQueryHandler(get_password_from_button, pattern='^' + SHOW_ALL.GET.value),
             CallbackQueryHandler(update_password_from_button, pattern='^' + SHOW_ALL.UPDATE.value),
-            CallbackQueryHandler(update_password_from_button, pattern='^' + SHOW_ALL.DELETE.value),
+            CallbackQueryHandler(delete_password_from_button, pattern='^' + SHOW_ALL.DELETE.value)
         ]
     },
     fallbacks=[CommandHandler('show_list', show_all_passwords)]

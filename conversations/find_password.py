@@ -49,7 +49,8 @@ find_pass_conv = ConversationHandler(
     states={
         FIND.FIND: [
             MessageHandler(Filters.text, find_password_answer),
-            CallbackQueryHandler(update_password, pattern='^' + FIND.UPDATE.value)
+            CallbackQueryHandler(update_password, pattern='^' + FIND.UPDATE.value),
+            CallbackQueryHandler(delete_password, pattern='^' + FIND.DELETE.value)
         ]
     },
     fallbacks=[CommandHandler('find', find_password_question1)]

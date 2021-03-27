@@ -2,7 +2,7 @@ from telegram import ReplyKeyboardMarkup, Update, ReplyKeyboardRemove
 from telegram.ext import ConversationHandler, CommandHandler, MessageHandler, Filters, CallbackQueryHandler, \
     CallbackContext
 
-from statements import DELETE, SHOW_ALL
+from statements import DELETE, SHOW_ALL, FIND
 from conversations.basic_conver import basic_markup, get_value
 import passwords_handlers as ph
 
@@ -36,11 +36,14 @@ def delete_password_answer(update: Update, context):
         name_of_service = ''
         return ConversationHandler.END
 
+
 def stop_deleting(update, context):
     return ConversationHandler.END
 
+
 delete_pass_conv = ConversationHandler(
-    entry_points=[CallbackQueryHandler(delete_password_from_inline_button, pattern='^' + SHOW_ALL.DELETE.value)],
+    entry_points=[CallbackQueryHandler(delete_password_from_inline_button,
+                                       pattern=f"^({SHOW_ALL.DELETE.value}.*|{FIND.DELETE.value}.*)")],
     states={
         DELETE.DELETE: [
             MessageHandler(Filters.text, delete_password_answer)

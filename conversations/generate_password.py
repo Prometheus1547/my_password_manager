@@ -1,8 +1,8 @@
 from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import ConversationHandler, CommandHandler, MessageHandler, Filters, CallbackContext
 
-from conversations.basic_conver import basic_markup
 import passwords_handlers as ph
+from conversations.basic_conver import basic_markup
 from statements import GENERATE
 
 

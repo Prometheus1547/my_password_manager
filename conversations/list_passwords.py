@@ -1,12 +1,9 @@
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import ConversationHandler, CommandHandler, MessageHandler, CallbackQueryHandler, CallbackContext, \
-    Filters
-
-from conversations.update_password import update_pass_conv, update_password_from_inline_button
-from statements import SHOW_ALL, UPDATE
+from telegram.ext import ConversationHandler, CommandHandler, CallbackQueryHandler, CallbackContext
 
 import passwords_handlers as ph
 from conversations.basic_conver import get_value
+from statements import SHOW_ALL
 
 
 def show_all_passwords(update: Update, context):
@@ -42,8 +39,8 @@ def get_password_from_button(update: Update, context: CallbackContext):
 def update_password_from_button(update: Update, context: CallbackContext):
     return update.callback_query.data
 
-def delete_password_from_button(update: Update, context: CallbackContext):
 
+def delete_password_from_button(update: Update, context: CallbackContext):
     return update.callback_query.data
 
 

@@ -1,12 +1,13 @@
-from telegram import ReplyKeyboardMarkup, Update, ReplyKeyboardRemove
+from telegram import ReplyKeyboardMarkup, Update
 from telegram.ext import ConversationHandler, CommandHandler, MessageHandler, Filters, CallbackQueryHandler, \
     CallbackContext
 
-from statements import DELETE, SHOW_ALL, FIND
-from conversations.basic_conver import basic_markup, get_value
 import passwords_handlers as ph
+from conversations.basic_conver import basic_markup, get_value
+from statements import DELETE, SHOW_ALL, FIND
 
 name_of_service = ''
+
 
 def delete_password_from_inline_button(delete: Update, context: CallbackContext):
     query = delete.callback_query
@@ -51,4 +52,3 @@ delete_pass_conv = ConversationHandler(
     },
     fallbacks=[CommandHandler('stop_delete', stop_deleting)]
 )
-

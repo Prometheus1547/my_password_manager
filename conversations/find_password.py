@@ -1,12 +1,12 @@
-from telegram import ReplyKeyboardMarkup, Update, ReplyKeyboardRemove, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update, ReplyKeyboardRemove, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ConversationHandler, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 
-from statements import FIND
-from conversations.basic_conver import basic_markup
 import passwords_handlers as ph
+from conversations.basic_conver import basic_markup
+from statements import FIND
+
 
 def find_password_question1(update: Update, context):
-
     update.message.reply_text('Please enter the name of service:', reply_markup=ReplyKeyboardRemove())
     return FIND.FIND
 
@@ -35,12 +35,10 @@ def find_password_answer(update: Update, context):
 
 
 def update_password(update: Update, context):
-
     return update.callback_query.data
 
 
 def delete_password(update: Update, context):
-
     return update.callback_query.data
 
 

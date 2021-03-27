@@ -4,8 +4,10 @@ from enum import Enum
 # to divide string to get value
 DELIMITER = '#####'
 
+
 class GENERATE(Enum):
     ASK_HOW = 'need name service or now'
+    ASK_HOW_LONG = 'how many symbols password should have'
     SERVICE = 'name of this service'
 
 
@@ -14,14 +16,17 @@ class SAVING(Enum):
     SERVICE = 'name of this service'
     PASSWORD = 'save the password'
 
+
 class FIND(Enum):
     FIND = 'find a password'
     UPDATE = 'FINDupdate password'+DELIMITER
     DELETE = 'FINDdelete password'+DELIMITER
 
+
 class UPDATE(Enum):
     SERVICE = 'enter service name'
     UPDATE = 'update password'
+
 
 class DELETE(Enum):
     DELETE = 'delete password'

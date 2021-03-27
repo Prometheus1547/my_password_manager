@@ -6,16 +6,17 @@ from configs import path_to_passwords
 from datetime import datetime
 
 chars = '.-abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
+digits = '1234567890'
 
 
 def get_file_name(id_user: str):
     return path_to_passwords + str(id_user) + '.csv'
 
 
-def generate_password(id_user:str, length: int = 12, service_name: str = ''):
+def generate_password(id_user: str, length: int = 12, service_name: str = '', symbols: str = chars):
     password = ''
     for i in range(length):
-        password += random.choice(chars)
+        password += random.choice(symbols)
     print('Generated password: ' + password)
     if service_name:
         print('For service: ' + service_name)

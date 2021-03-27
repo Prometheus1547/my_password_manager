@@ -8,31 +8,32 @@ from statements import GENERATE
 
 def generate_password_question(update: Update, context: CallbackContext):
     replay_keyboard = [
-        ['YES', 'NO']
+        ['All Symbols', 'Only digits']
     ]
     markup = ReplyKeyboardMarkup(replay_keyboard, one_time_keyboard=True)
-    update.message.reply_text('You want your password for some service or no?', reply_markup=markup)
+    update.message.reply_text('What symbols use in password?', reply_markup=markup)
     return GENERATE.ASK_HOW
+
+
+symbols = ''
 
 
 def generate_password_question2(update: Update, context):
     answer = update.message.text
-    if answer.lower() == 'yes':
-        update.message.reply_text('Please give me name of service:')
-        return GENERATE.SERVICE
+    global symbols
+    if answer.lower() == 'all symbols':
+        symbols = ph.chars
     else:
-        ph.check_password('', id_user=update.message.from_user.id)
-        password = ph.generate_password(id_user=update.message.from_user.id)
-        update.message.reply_text('Your generated password is:')
-        update.message.reply_text(password, reply_markup=basic_markup)
+        symbols = ph.digits
 
-        return ConversationHandler.END
+    update.message.reply_text('Please give me name of service:')
+    return GENERATE.SERVICE
 
 
 def generate_password_answer1(update: Update, context):
     name_of_service = update.message.text
     if ph.check_password(name_of_service, id_user=update.message.from_user.id):
-        password = ph.generate_password(service_name=name_of_service, id_user=update.message.from_user.id)
+        password = ph.generate_password(service_name=name_of_service, id_user=update.message.from_user.id, symbols=symbols)
         update.message.reply_text('Your generated password for service ' + name_of_service + ' is:')
         update.message.reply_text(password, reply_markup=basic_markup)
     else:
@@ -46,7 +47,7 @@ generate_pass_conv = ConversationHandler(
     entry_points=[CommandHandler('generate', generate_password_question)],
     states={
         GENERATE.ASK_HOW: [
-            MessageHandler(Filters.regex('^(YES|NO)$'), generate_password_question2)
+            MessageHandler(Filters.regex('^(All Symbols|Only digits)$'), generate_password_question2)
         ],
         GENERATE.SERVICE: [
             MessageHandler(Filters.text, generate_password_answer1)

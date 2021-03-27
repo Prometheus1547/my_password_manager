@@ -13,11 +13,11 @@ def show_all_passwords(update: Update, context):
         for password in passwords:
             button = [
                 [
-                    InlineKeyboardButton("Get pass", callback_data=SHOW_ALL.GET.value + password[2])
+                    InlineKeyboardButton("Get pass🔐", callback_data=SHOW_ALL.GET.value + password[2])
                 ],
                 [
-                    InlineKeyboardButton("Update", callback_data=SHOW_ALL.UPDATE.value + password[1]),
-                    InlineKeyboardButton("Delete", callback_data=SHOW_ALL.DELETE.value + password[1])
+                    InlineKeyboardButton("Update🔄", callback_data=SHOW_ALL.UPDATE.value + password[1]),
+                    InlineKeyboardButton("Delete❌", callback_data=SHOW_ALL.DELETE.value + password[1])
                 ]
             ]
             reply_markup = InlineKeyboardMarkup(button)

@@ -20,8 +20,8 @@ def find_password_answer(update: Update, context):
     if len(password) > 0:
         button = [
             [
-                InlineKeyboardButton("Update", callback_data=FIND.UPDATE.value + record[1]),
-                InlineKeyboardButton("Delete", callback_data=FIND.DELETE.value + record[1])
+                InlineKeyboardButton("Update🔄", callback_data=FIND.UPDATE.value + record[1]),
+                InlineKeyboardButton("Delete❌", callback_data=FIND.DELETE.value + record[1])
             ]
         ]
         reply_markup = InlineKeyboardMarkup(button)

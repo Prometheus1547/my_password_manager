@@ -41,6 +41,7 @@ def backup_passwords(update: Update, context):
 def main():
     updater = Updater(token=API_TOKEN, use_context=True)
 
+
     updater.dispatcher.add_handler(CommandHandler('start', start))
     updater.dispatcher.add_handler(CommandHandler('backup', backup_passwords))
 

@@ -16,7 +16,7 @@ def delete_password_from_inline_button(delete: Update, context: CallbackContext)
     name_of_service = get_value(query.data)
 
     replay_keyboard = [
-        ['YES', 'NO']
+        ['YES✅', 'NO❌']
     ]
     markup_delete = ReplyKeyboardMarkup(replay_keyboard, one_time_keyboard=True)
     query.message.reply_text('Are you sure?', reply_markup=markup_delete)
@@ -27,7 +27,7 @@ def delete_password_from_inline_button(delete: Update, context: CallbackContext)
 def delete_password_answer(update: Update, context):
     global name_of_service
     answer = update.message.text
-    if answer.lower() == 'yes':
+    if answer.lower() == 'yes' or answer == 'YES✅':
         ph.delete_password_by_service(name_of_service, id_user=update.message.from_user.id)
         update.message.reply_text(f'Deleted password for "{name_of_service}" with success', reply_markup=basic_markup)
         name_of_service = ''

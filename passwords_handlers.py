@@ -75,11 +75,11 @@ def get_passwords(id_user: str):
     return pass_lines
 
 
-def read_all_passwords(id_user: str, take_titles: bool = False) -> list[str, str, str, str]:
+def read_all_passwords(id_user: str, take_titles: bool = False):
     filename = get_file_name(id_user)
     if os.path.exists(filename):
         with open(filename, 'r') as csv_file:
-            pass_dictionary = list[str, str, str, str]()
+            pass_dictionary = list()
             reader = csv.reader(csv_file)
             i = 0
             for row in reader:
@@ -95,7 +95,7 @@ def read_all_passwords(id_user: str, take_titles: bool = False) -> list[str, str
 def find_password_by_service_name(service_name: str, id_user: str):
     print('Trying to find password for service ' + service_name)
     passwords = read_all_passwords(id_user)
-    rec = list[str, str, str, str]()
+    rec = list()
     for record in passwords:
         if service_name == record[1]:
             rec = record

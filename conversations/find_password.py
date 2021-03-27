@@ -2,7 +2,7 @@ from telegram import ReplyKeyboardMarkup, Update, ReplyKeyboardRemove
 from telegram.ext import ConversationHandler, CommandHandler, MessageHandler, Filters
 
 from statements import FIND
-from conversations.basic_conver import markup
+from conversations.basic_conver import basic_markup
 import passwords_handlers as ph
 
 def find_password_question1(update: Update, context):
@@ -18,10 +18,10 @@ def find_password_answer(update: Update, context):
     if record:
         password = record[2]
     if len(password) > 0:
-        update.message.reply_text('Here is your password:', reply_markup=markup)
+        update.message.reply_text('Here is your password:', reply_markup=basic_markup)
         update.message.reply_text(password)
     else:
-        update.message.reply_text('No passwords for this service found!', reply_markup=markup)
+        update.message.reply_text('No passwords for this service found!', reply_markup=basic_markup)
     return ConversationHandler.END
 
 

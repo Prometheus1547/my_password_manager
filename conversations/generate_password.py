@@ -1,7 +1,7 @@
 from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import ConversationHandler, CommandHandler, MessageHandler, Filters, CallbackContext
 
-from conversations.basic_conver import markup
+from conversations.basic_conver import basic_markup
 import passwords_handlers as ph
 from statements import GENERATE
 
@@ -24,7 +24,7 @@ def generate_password_question2(update: Update, context):
         ph.check_password('')
         password = ph.generate_password()
         update.message.reply_text('Your generated password is:')
-        update.message.reply_text(password, reply_markup=markup)
+        update.message.reply_text(password, reply_markup=basic_markup)
 
         return ConversationHandler.END
 
@@ -34,10 +34,10 @@ def generate_password_answer1(update: Update, context):
     if ph.check_password(name_of_service):
         password = ph.generate_password(service_name=name_of_service)
         update.message.reply_text('Your generated password for service ' + name_of_service + ' is:')
-        update.message.reply_text(password, reply_markup=markup)
+        update.message.reply_text(password, reply_markup=basic_markup)
     else:
         update.message.reply_text('Looks like something get wrong! Maybe password for this service already exists',
-                                  reply_markup=markup)
+                                  reply_markup=basic_markup)
 
     return ConversationHandler.END
 

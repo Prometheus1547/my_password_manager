@@ -3,7 +3,7 @@ from telegram.ext import ConversationHandler, CommandHandler, MessageHandler, Fi
     CallbackContext
 
 from statements import DELETE, SHOW_ALL
-from conversations.basic_conver import markup, get_value
+from conversations.basic_conver import basic_markup, get_value
 import passwords_handlers as ph
 
 name_of_service = ''
@@ -28,11 +28,11 @@ def delete_password_answer(update: Update, context):
     answer = update.message.text
     if answer.lower() == 'yes':
         ph.delete_password_by_service(name_of_service)
-        update.message.reply_text(f'Deleted password "{answer}" with success', reply_markup=markup)
+        update.message.reply_text(f'Deleted password for "{name_of_service}" with success', reply_markup=basic_markup)
         name_of_service = ''
         return ConversationHandler.END
     else:
-        update.message.reply_text('Got it.', reply_markup=markup)
+        update.message.reply_text('Got it.', reply_markup=basic_markup)
         name_of_service = ''
         return ConversationHandler.END
 

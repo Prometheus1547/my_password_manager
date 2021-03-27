@@ -3,7 +3,7 @@ from telegram.ext import ConversationHandler, CommandHandler, MessageHandler, Fi
 
 import passwords_handlers as ph
 from statements import SAVING
-from conversations.basic_conver import markup
+from conversations.basic_conver import basic_markup
 
 def save_password_question_1(update: Update, context):
     replay_keyboard = [
@@ -30,16 +30,19 @@ name_of_service = ''
 def save_password_question_3(update: Update, context):
     global name_of_service
     name_of_service = update.message.text
-    update.message.reply_text('Please insert password:')
-
-    return SAVING.PASSWORD
+    if ph.check_password(service_name=name_of_service):
+        update.message.reply_text('Please insert password:')
+        return SAVING.PASSWORD
+    else:
+        update.message.reply_text('Password for this service already exists!', reply_markup=basic_markup)
+        return ConversationHandler.END
 
 
 def save_password_answer(update: Update, context):
     global name_of_service
     password = update.message.text
     ph.save_pass_to_csv(name_of_service, password)
-    update.message.reply_text(f'Added password "{password}" with success', reply_markup=markup)
+    update.message.reply_text(f'Added password "{password}" with success', reply_markup=basic_markup)
     name_of_service = ''
     return ConversationHandler.END
 

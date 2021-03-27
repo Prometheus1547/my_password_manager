@@ -5,7 +5,7 @@ replay_keyboard = [
     ['/find', '/show_list']
 ]
 
-markup = ReplyKeyboardMarkup(replay_keyboard, one_time_keyboard=False)
+basic_markup = ReplyKeyboardMarkup(replay_keyboard, one_time_keyboard=False)
 
 def get_value(callback_data: str):
     vals = callback_data.split(DELIMITER)

@@ -16,6 +16,8 @@ class SAVING(Enum):
 
 class FIND(Enum):
     FIND = 'find a password'
+    UPDATE = 'FINDupdate password'+DELIMITER
+    DELETE = 'FINDdelete password'+DELIMITER
 
 class UPDATE(Enum):
     SERVICE = 'enter service name'

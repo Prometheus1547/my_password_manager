@@ -1,5 +1,5 @@
-from telegram import ReplyKeyboardMarkup, Update, ReplyKeyboardRemove
-from telegram.ext import ConversationHandler, CommandHandler, MessageHandler, Filters
+from telegram import ReplyKeyboardMarkup, Update, ReplyKeyboardRemove, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import ConversationHandler, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 
 from statements import FIND
 from conversations.basic_conver import basic_markup
@@ -18,19 +18,38 @@ def find_password_answer(update: Update, context):
     if record:
         password = record[2]
     if len(password) > 0:
-        update.message.reply_text('Here is your password:', reply_markup=basic_markup)
-        update.message.reply_text(password)
+        button = [
+            [
+                InlineKeyboardButton("Update", callback_data=FIND.UPDATE.value + record[1]),
+                InlineKeyboardButton("Delete", callback_data=FIND.DELETE.value + record[1])
+            ]
+        ]
+        reply_markup = InlineKeyboardMarkup(button)
+        update.message.reply_text('Here is your password:')
+        update.message.reply_text(password, reply_markup=reply_markup)
+
+        return FIND.FIND
     else:
         update.message.reply_text('No passwords for this service found!', reply_markup=basic_markup)
     return ConversationHandler.END
 
+
+def update_password(update: Update, context):
+
+    return update.callback_query.data
+
+
+def delete_password(update: Update, context):
+
+    return update.callback_query.data
 
 
 find_pass_conv = ConversationHandler(
     entry_points=[CommandHandler('find', find_password_question1)],
     states={
         FIND.FIND: [
-            MessageHandler(Filters.text, find_password_answer)
+            MessageHandler(Filters.text, find_password_answer),
+            CallbackQueryHandler(update_password, pattern='^' + FIND.UPDATE.value)
         ]
     },
     fallbacks=[CommandHandler('find', find_password_question1)]

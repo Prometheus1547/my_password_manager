@@ -2,7 +2,7 @@ from telegram import ReplyKeyboardMarkup, Update, ReplyKeyboardRemove
 from telegram.ext import ConversationHandler, CommandHandler, MessageHandler, Filters, CallbackQueryHandler, \
     CallbackContext
 
-from statements import UPDATE, SHOW_ALL
+from statements import UPDATE, SHOW_ALL, FIND
 from conversations.basic_conver import basic_markup, get_value
 import passwords_handlers as ph
 
@@ -42,7 +42,8 @@ def update_password_answer(update: Update, context):
 
 
 update_pass_conv = ConversationHandler(
-    entry_points=[CallbackQueryHandler(update_password_from_inline_button, pattern='^' + SHOW_ALL.UPDATE.value),
+    entry_points=[CallbackQueryHandler(update_password_from_inline_button,
+                                       pattern=f"^({SHOW_ALL.UPDATE.value}.*|{FIND.UPDATE.value}.*)"),
                   CommandHandler('update', update_password_question_1)],
     states={
         UPDATE.SERVICE: [

@@ -4,7 +4,8 @@ from statements import DELIMITER
 
 replay_keyboard = [
     ['/generate', '/save'],
-    ['/find', '/show_list']
+    ['/find', '/show_list'],
+    ['/backup']
 ]
 
 basic_markup = ReplyKeyboardMarkup(replay_keyboard, one_time_keyboard=False)

@@ -3,7 +3,7 @@ from telegram.ext import ConversationHandler, CommandHandler, MessageHandler, Fi
 
 import passwords_handlers as ph
 from conversations.basic_conver import basic_markup, get_value
-from statements import FIND
+from statements import FIND, DELIMITER
 
 
 def find_password_question1(update: Update, context):
@@ -36,8 +36,8 @@ def find_password_answer(update: Update, context):
                     InlineKeyboardButton("Get pass🔐", callback_data=FIND.GET.value + password[2])
                 ],
                 [
-                    InlineKeyboardButton("Update🔄", callback_data=FIND.UPDATE.value + password[1]),
-                    InlineKeyboardButton("Delete❌", callback_data=FIND.DELETE.value + password[1])
+                    InlineKeyboardButton("Update🔄", callback_data=FIND.UPDATE.value + password[1] + DELIMITER + password[0]),
+                    InlineKeyboardButton("Delete❌", callback_data=FIND.DELETE.value + password[1] + DELIMITER + password[0])
                 ]
             ]
             reply_markup = InlineKeyboardMarkup(button)

@@ -141,10 +141,10 @@ def update_password_by_id(pass_id: str, new_password: str, id_user: str):
     print('Updated password')
 
 
-def delete_password_by_service(service_name: str, id_user: str):
+def delete_password_by_id(pass_id: str, id_user: str):
     passwords = read_all_passwords(take_titles=True, id_user=id_user)
 
-    passwords.remove(find_password_by_service_name(service_name, id_user=id_user)[0])
+    passwords.remove(find_service_by_id(pass_id, id_user=id_user))
 
     rewrite_passwords_dictionary(passwords, id_user=id_user)
 
